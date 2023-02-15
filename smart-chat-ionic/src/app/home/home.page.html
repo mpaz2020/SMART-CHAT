@@ -1,0 +1,56 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title class="ion-text-center"> <strong>Smart</strong>Chat</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [scrollEvents]="true">
+  <div *ngIf="!messages.length" class="empty">
+    <ion-icon src="assets/bot.svg"></ion-icon>
+    <h4>Escribe algo...</h4>
+  </div>
+
+  <ion-item
+    lines="none"
+    [ngClass]="{'bot':message.sender!='me'}"
+    class="chat-item"
+    *ngFor="let message of messages;index as i"
+  >
+    <ion-badge
+      slot="start"
+      [color]="message.sender=='me' ? 'success':'tertiary'"
+      mode="ios"
+    >
+      <ion-icon
+        class="chat-icon"
+        [src]="message.sender=='me'?'assets/user.svg':'assets/bot.svg'"
+      >
+      </ion-icon>
+    </ion-badge>
+    <ion-label class="ion-text-wrap">
+      <p class="w-space">{{message.content}}</p>
+      <ion-spinner
+        *ngIf="loading && (i+1==messages.length)"
+        name="dots"
+        color="tertiary"
+      />
+    </ion-label>
+  </ion-item>
+</ion-content>
+
+<ion-footer class="ion-padding">
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" (keyup.enter)="onSubmit()">
+    <ion-item lines="none" class="text-box-item">
+      <ion-textarea
+        formControlName="prompt"
+        auto-grow="true"
+        placeholder="Escribe algo..."
+      />
+      <ion-buttons slot="end">
+        <ion-button type="submit" color="tertiary" [disabled]="form.invalid">
+          <ion-icon name="send" class="submit-icon"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-item>
+  </form>
+</ion-footer>
